@@ -207,14 +207,27 @@ const getHtml = async (url,pageName,folderName) => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'networkidle0'});
-    let html  = await page.content();
+    try{
+        let html  = await page.$eval('.jumbotron', e => e.innerHTML);
+        html = removeAcentos(html);
+        await fs.writeFileSync(`./scrappedPages/${folderName}/${pageName}.html`, html, function (err) {
+            if (err) throw err;
+        });
+        console.log(`\t${pageName}=>File created successfully.`);
+    }catch(error){ 
+        let html  = await page.content();
+        await browser.close();
+
+        html = removeAcentos(html);
+        await fs.writeFileSync(`./scrappedPages/${folderName}/${pageName}.html`, html, function (err) {
+            if (err) throw err;
+        });
+        console.log(`\t${pageName}=>No tiene JUMBOTRON, se descargo HTML`);
+    } 
+    
     await browser.close();
 
-    html = removeAcentos(html);
-    await fs.writeFileSync(`./scrappedPages/${folderName}/${pageName}.html`, html, function (err) {
-        if (err) throw err;
-    });
-    console.log(`\t${pageName}=>File created successfully.`);
+    
 };
 
 const getPages = async () => {
