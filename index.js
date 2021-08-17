@@ -72,7 +72,7 @@ const getPages = async () => {
     if (!fs.existsSync(`./scrappedPages/Adjudicaciones`)) fs.mkdirSync(`./scrappedPages/Adjudicaciones`);
     console.log(`Adjudicaciones start...`);
     for (i=0;i<AdjudicaionesUrls.length;i++){
-        await getHtml(AdjudicaionesUrls[i],AdjudicaionesUrls[i].replace("https://fortalezacoreapp-lab.azurewebsites.net/Adjudicaciones/",""),"Adjudicaciones");
+        await getHtml(AdjudicaionesUrls[i],AdjudicaionesUrls[i].replace(url,""),"Adjudicaciones");
     }
     console.log(`Adjudicaciones finished...`);
 
